@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6단계(슬라이더Zone)</title>
+    <title>7단계(슬라이더Zone-자바스크립트)</title>
     <script src="js/jquery.js"></script>
     <style>
         *{margin:0; padding: 0;}
@@ -151,6 +151,13 @@
             <!-- 메뉴Zone끝 -->
             <!-- 슬라이더Zone시작 -->
             <style>
+                .sliderArea {
+                    position: relative;
+                    width: 100%;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    overflow: hidden;
+                }
                 /* 슬라이더 배경이미지처리 */
                 #sliderZone{
                     position: relative;
@@ -163,8 +170,8 @@
                     /* width: 100%; */
                     display: flex;
                     position: relative;
-                    left:000%;  /*좌표변경으로 스라이딩 표현 */
-                    /* transition: left 0.5s ease;  */
+                    left:0;  /*좌표변경으로 스라이딩 표현 */
+                    transition: left 0.5s ease; 
                 }
                 /* .slider_panel>li */
                 .slider_image{
@@ -178,13 +185,14 @@
                 /* 슬라이더 컨트롤 */
                 #sub_photo_bg{
                     background-color: aqua;
-
                 }
                 .control_panel{
                     position: absolute;
                     bottom:10px;
                     left:50%;
                     display: flex;
+                    gap:5px;
+                    transform: translateX(-50%);
                 }
                 .control_btn{
                     width: 10px;
@@ -212,12 +220,12 @@
             <div id="sliderZone">
                 <div id="sub_photo_bg">
                     <ul class="slider_panel">
-                        <li class="slider_img"><img src="img/1.jpg" alt=""></li>
-                        <li class="slider_img"><img src="img/2.jpg" alt=""></li>
-                        <li class="slider_img"><img src="img/3.jpg" alt=""></li>
-                        <li class="slider_img"><img src="img/1.jpg" alt=""></li>
-                        <li class="slider_img"><img src="img/2.jpg" alt=""></li>
-                        <li class="slider_img"><img src="img/3.jpg" alt=""></li>
+                        <li class="slider_image"><img src="img/1.jpg" alt=""></li>
+                        <li class="slider_image"><img src="img/2.jpg" alt=""></li>
+                        <li class="slider_image"><img src="img/3.jpg" alt=""></li>
+                        <!-- <li class="slider_image"><img src="img/1.jpg" alt=""></li>
+                        <li class="slider_image"><img src="img/2.jpg" alt=""></li>
+                        <li class="slider_image"><img src="img/3.jpg" alt=""></li> -->
                     </ul>
                     <div class="control_panel">
                         <div class="control_btn active"  data-index="0"></div>
@@ -231,12 +239,44 @@
                 </div>
             </div>
             <script>
-                // $(function(){
-                //     const $sliderPanel = $('.slider_panel');
-                //     const $controlBtns = $('.control_btn')
+                $(function(){
+                    const $sliderPanel = $('.slider_panel');
+                    const $controlBtns = $('.control_btn');
+                    const $leftBtn     = $('.left_btn img');
+                    const $rightBtn    = $('.right_btn img');
 
+                    let currentIndex = 0;
+                    function updateSlider(index){
+                        $sliderPanel.css('left', `-${index * 100}%`);
+                        $controlBtns.removeClass('active');
+                        $controlBtns.eq(index).addClass('active');
+                    }
 
-                // });
+                    $leftBtn.on('click',function(){
+                        currentIndex--;
+                        if(currentIndex<0){
+                            currentIndex=0;
+                        }
+                        updateSlider(currentIndex);
+                    });
+                    $rightBtn.on('click', function(){
+                        currentIndex++;
+                        if(currentIndex>2){
+                            currentIndex=2;
+                        }
+                        updateSlider(currentIndex);
+                    });
+
+                    $controlBtns.on('click',function(){
+                        currentIndex = parseInt($(this).data('index'));
+                        updateSlider(currentIndex);
+
+                    });
+                    setInterval(function(){
+                        currentIndex=(currentIndex+1) % $controlBtns.length;
+                        updateSlider(currentIndex);
+                    }, 3000);
+                });
             </script>
             <!-- 슬라이더Zone끝 -->
         </div>
